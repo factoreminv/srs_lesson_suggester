@@ -9,6 +9,8 @@ def schedule(dept, course, sect, year, semester):
     req = requests.get(url)
     soup = bs4.BeautifulSoup(req.content, 'html5lib')
 
+    instructor = str(soup)[str(soup).index("Instructor(s):")+48:str(soup).index("</div>",str(soup).index("Instructor(s):")+48)-20]
+
     lesson_plan = open(f"{dept}{course}-{sect}.txt", "w")
     for lesson in soup.find_all("b"):
         lesson_plan.write(str(lesson.parent.parent))
@@ -23,7 +25,7 @@ def schedule(dept, course, sect, year, semester):
     for line in file:
         if "<td" == line[:3]:
             if "cl_ders_DY" in line:
-                line_mat.append(line[line.index("text-align:center")+19: line.index("<", line.index("text-align:center")+22)])
+                line_mat.append(line[line.index("text-align:center")+19: line.index("<", line.index("text-align:center")+22)]+";"+instructor)
             else:
                 line_mat.append(0)
 
@@ -58,7 +60,7 @@ def hour_finder(l_dict):
     for day in l_dict:
         for i in range(len(l_dict[day])):
             if l_dict[day][i] != "0":
-                retlist.append((day, fix_hours[i][0], fix_hours[i][1], l_dict[day][i]))
+                retlist.append((day, fix_hours[i][0], fix_hours[i][1], l_dict[day][i].split(";")[0], l_dict[day][i].split(";")[1]))
     return retlist
 
 day_schedule = day_setter(schedule("MAN","256","1","2022","1"))
