@@ -3,9 +3,9 @@ import html5lib
 import bs4
 import numpy as np
 
-def schedule(dept, course, sect):
+def schedule(dept, course, sect, year, semester):
 
-    url = f"https://stars.bilkent.edu.tr/syllabus/view/{dept}/{int(course)}/20221?section={int(sect)}"
+    url = f"https://stars.bilkent.edu.tr/syllabus/view/{dept}/{int(course)}/{int(year)}{int(semester)}?section={int(sect)}"
     req = requests.get(url)
     soup = bs4.BeautifulSoup(req.content, 'html5lib')
 
@@ -23,7 +23,7 @@ def schedule(dept, course, sect):
     for line in file:
         if "<td" == line[:3]:
             if "cl_ders_DY" in line:
-                line_mat.append(1)
+                line_mat.append(line[line.index("text-align:center")+19: line.index("<", line.index("text-align:center")+22)])
             else:
                 line_mat.append(0)
 
@@ -57,13 +57,10 @@ def hour_finder(l_dict):
 
     for day in l_dict:
         for i in range(len(l_dict[day])):
-            if l_dict[day][i] == 1:
-                retlist.append((day, fix_hours[i][0], fix_hours[i][1]))
+            if l_dict[day][i] != "0":
+                retlist.append((day, fix_hours[i][0], fix_hours[i][1], l_dict[day][i]))
     return retlist
 
-lesson_schedule = schedule("EEE","351","1")
-day_schedule = day_setter(lesson_schedule)
+day_schedule = day_setter(schedule("MAN","256","1","2022","1"))
 
 print(hour_finder(day_schedule))
-
-
