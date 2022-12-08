@@ -2,7 +2,9 @@ import tkinter as tk
 from main import hour_finder, day_setter, schedule
 
 def show_entry_fields():
-    print(hour_finder(day_setter(schedule(c1.get(), c2.get(), c3.get(), "2022", "1"))))
+    lis = hour_finder(day_setter(schedule(c1.get(), c2.get(), c3.get(), "2022", "1")))
+    for tup in lis:
+        print(tup[0],tup[1]+" - "+tup[2])
 
 master = tk.Tk()
 tk.Label(master,
