@@ -1,3 +1,5 @@
+# coding=UTF-8
+
 from main import hour_finder, day_setter, schedule
 from datetime import datetime
 
@@ -28,7 +30,19 @@ def create_querry_file(dept):
                 file.write(str(tuple([dept]) + tuple([str(n)]) + tuple([str(sect)]) + tuple(lis))+"\n")
                 print(str(tuple([dept]) + tuple([str(n)]) + tuple([str(sect)]) + tuple(lis)))
             except:
-                None
+                break
     file.close()
+
+def file_search(filename, instructor):
+    instructor.encode(encoding="UTF-8", errors="strict")
+    retlist = []
+    file = open(filename, "r", encoding="utf-8")
+    for line in file:
+        if instructor in line:
+            retlist.append(line)
+    return retlist
+
+
 #querry("PHYS")
-create_querry_file("MATH")
+#create_querry_file("EEE")
+print(file_search("MATH.txt", "Aurelian"))
