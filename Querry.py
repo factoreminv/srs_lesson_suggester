@@ -33,7 +33,7 @@ def create_querry_file(dept):
                 break
     file.close()
 
-def file_search(filename, instructor):
+def I_file_search(filename, instructor, sel="T"):
     instructor.encode(encoding="UTF-8", errors="strict")
     retlist = []
     file = open(filename, "r", encoding="utf-8")
@@ -41,7 +41,22 @@ def file_search(filename, instructor):
         line = line.strip().replace("(","").replace(")","").replace("'","").replace("'","").split(",")
         try:
             if instructor in line[7]:
-                retlist.append(line[:3])
+                retlist.append(line[:3]+line[6:8])
+        except:
+            None
+    return retlist
+
+def T_file_search(filename, time, day):
+
+    retlist = []
+    file = open(filename, "r", encoding="utf-8")
+    for line in file:
+        line = line.strip().replace(", ",",").replace("(","").replace(")","").replace("'","").replace("'","").split(",")
+        try:
+            if day in line[3] and time < line[4]:
+                retlist.append([line[4]] + line[:3] + line[6:8])
+            if day in line[13] and time < line[14]:
+                retlist.append([line[14]] + line[:3] + line[6:8])
         except:
             None
     return retlist
@@ -49,4 +64,4 @@ def file_search(filename, instructor):
 
 #querry("PHYS")
 #create_querry_file("EEE")
-print(file_search("MATH.txt", "Orhan Arıkan"))
+print(T_file_search("MATH.txt", " 13:20", "Tuesday"))
