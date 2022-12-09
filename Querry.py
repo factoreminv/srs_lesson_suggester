@@ -38,11 +38,15 @@ def file_search(filename, instructor):
     retlist = []
     file = open(filename, "r", encoding="utf-8")
     for line in file:
-        if instructor in line:
-            retlist.append(line)
+        line = line.strip().replace("(","").replace(")","").replace("'","").replace("'","").split(",")
+        try:
+            if instructor in line[7]:
+                retlist.append(line[:3])
+        except:
+            None
     return retlist
 
 
 #querry("PHYS")
 #create_querry_file("EEE")
-print(file_search("MATH.txt", "Aurelian"))
+print(file_search("MATH.txt", "Orhan Arıkan"))
