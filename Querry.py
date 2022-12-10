@@ -59,6 +59,21 @@ def T_file_search(filename, time, day):
                 retlist.append([line[14]] + line[:3] + line[6:8])
         except:
             None
+
+
+    #SORTING FOR ASCENDING TIME
+
+    for step in range(len(retlist)):
+        min_idx = step
+
+        for i in range(step + 1, len(retlist)):
+
+            if retlist[i][0] < retlist[min_idx][0]:
+                min_idx = i
+
+        # put min at the correct position
+        (retlist[step], retlist[min_idx]) = (retlist[min_idx], retlist[step])
+
     return retlist
 
 
