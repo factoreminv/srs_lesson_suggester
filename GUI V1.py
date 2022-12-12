@@ -17,8 +17,8 @@ def Time_class_look():
     current_time = now.strftime("%H:%M:%S")
     current_day = now.strftime("%A")
 
-    current_time = "12:20"
-    current_day = "Wednesday"
+    #current_time = "12:20"
+    #current_day = "Wednesday"
 
     k = 1
 
