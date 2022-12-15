@@ -23,8 +23,8 @@ def querry(dept):
 
 def create_querry_file(dept):
     file = open(dept+".txt","w",encoding="utf-8")
-    for n in range(101, 499):
-        for sect in range(1,20):
+    for n in range(101, 700):
+        for sect in range(1,100):
             try:
                 lis = hour_finder(day_setter(schedule(dept, n, sect, "2022", "1")))
                 file.write(str(tuple([dept]) + tuple([str(n)]) + tuple([str(sect)]) + tuple(lis))+"\n")
@@ -54,9 +54,9 @@ def T_file_search(filename, time, day):
         line = line.strip().replace(", ",",").replace("(","").replace(")","").replace("'","").replace("'","").split(",")
         try:
             if day in line[3] and time < line[4]:
-                retlist.append([line[4]] + line[:3] + line[6:8])
-            if day in line[13] and time < line[14]:
-                retlist.append([line[14]] + line[:3] + line[6:8])
+                retlist.append([line[4]] + line[:3] + line[6:9])
+            if day in line[15] and time < line[16]:
+                retlist.append([line[16]] + line[:3] + line[6:9])
         except:
             None
 
@@ -77,6 +77,11 @@ def T_file_search(filename, time, day):
     return retlist
 
 
-#querry("PHYS")
-#create_querry_file("EEE")
-print(T_file_search("MATH.txt", " 13:20", "Tuesday"))
+def main():
+    pass
+
+if __name__ == "__main__":
+    main()
+    # querry("PHYS")
+    create_querry_file("MATH")
+    # print(T_file_search("PHYS.txt", "13:20", "Tuesday"))
