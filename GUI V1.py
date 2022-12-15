@@ -7,8 +7,9 @@ department_list = []
 def save_department():
     entry = str(c1.get()).upper()
     c1.delete("0", tk.END)
-    department_list.append(entry)
-    text_box.insert("1.0",entry+"\n")
+    if entry not in department_list:
+        department_list.append(entry)
+        text_box.insert("1.0", entry + "\n")
 
 def Time_class_look():
     c1.delete("0", tk.END)
@@ -17,8 +18,8 @@ def Time_class_look():
     current_time = now.strftime("%H:%M:%S")
     current_day = now.strftime("%A")
 
-    #current_time = "12:20"
-    #current_day = "Wednesday"
+    current_time = "08:20"
+    current_day = "Wednesday"
 
     k = 1
 
@@ -31,14 +32,15 @@ def Time_class_look():
         k += 2
 
         for i in range(len(classes)):
-            text_box.insert(str(k+i+1)+".0", classes[i][0]+"   "+classes[i][1]+classes[i][2]+"-"+classes[i][3]+" "+classes[i][5]+" "+classes[i][4]+"\n")
+            text_box.insert(str(k+i+1)+".0", classes[i][0]+"   "+classes[i][1]+classes[i][2]+"-"+classes[i][3]+" "+classes[i][5]+" "+classes[i][4]+" "+classes[i][6]+"\n")
             t = i
         k += t+1
 
         text_box.insert(str(k + 1) + ".0", "\n")
         text_box.insert(str(k + 1) + ".0", "\n")
         k += 2
-    return department_list
+
+    department_list.clear()
 
 master = tk.Tk()
 tk.Label(master,
