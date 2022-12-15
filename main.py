@@ -2,14 +2,23 @@ import requests
 import html5lib
 import bs4
 import numpy as np
+import os
+
 
 def schedule(dept, course, sect, year, semester):
-
     url = f"https://stars.bilkent.edu.tr/syllabus/view/{dept}/{int(course)}/{int(year)}{int(semester)}?section={int(sect)}"
     req = requests.get(url)
     soup = bs4.BeautifulSoup(req.content, 'html5lib')
 
-    instructor = str(soup)[str(soup).index("Instructor(s):")+48:str(soup).index("</div>",str(soup).index("Instructor(s):")+48)-20]
+    #print(soup.prettify())
+
+    instructor = str(soup)[str(soup).index("Instructor(s):") + 48:str(soup).index("</div>", str(soup).index(
+        "Instructor(s):") + 48) - 20]
+
+    class_name_sentence = str(soup)[str(soup).index("<h1>"):str(soup).index("</h1>")]
+    class_name = class_name_sentence[class_name_sentence.index("-")+2:]
+
+    #print(class_name)
 
     lesson_plan = open(f"{dept}{course}-{sect}.txt", "w")
     for lesson in soup.find_all("b"):
@@ -25,7 +34,8 @@ def schedule(dept, course, sect, year, semester):
     for line in file:
         if "<td" == line[:3]:
             if "cl_ders_DY" in line:
-                line_mat.append(line[line.index("text-align:center")+19: line.index("<", line.index("text-align:center")+22)]+";"+instructor)
+                line_mat.append(line[line.index("text-align:center") + 19: line.index("<", line.index(
+                    "text-align:center") + 22)] + ";" + instructor + ";" + class_name)
             else:
                 line_mat.append(0)
 
@@ -33,7 +43,12 @@ def schedule(dept, course, sect, year, semester):
             final_mat.append(line_mat)
             line_mat = []
 
+    file.close()
+    os.remove(f"{dept}{course}-{sect}.txt")
+
     return final_mat
+
+
 def day_setter(mat):
     day_dict = {}
     days = {1: "Monday", 2: "Tuesday", 3: "Wednesday", 4: "Thursday", 5: "Friday", 6: "Saturday", 7: "Sunday"}
@@ -47,6 +62,8 @@ def day_setter(mat):
         day += 1
 
     return day_dict
+
+
 def hour_finder(l_dict):
     fix_hours = {
         0: ("08:30", "09:20"), 1: ("09:30", "10:20"), 2: ("10:30", "11:20"), 3: ("11:30", "12:20"),
@@ -60,9 +77,14 @@ def hour_finder(l_dict):
     for day in l_dict:
         for i in range(len(l_dict[day])):
             if l_dict[day][i] != "0":
-                retlist.append((day, fix_hours[i][0], fix_hours[i][1], l_dict[day][i].split(";")[0], l_dict[day][i].split(";")[1]))
+                retlist.append((day, fix_hours[i][0], fix_hours[i][1], l_dict[day][i].split(";")[0],
+                                l_dict[day][i].split(";")[1], l_dict[day][i].split(";")[2]))
     return retlist
 
-day_schedule = day_setter(schedule("MAN","256","1","2022","1"))
+def main():
+    pass
 
-print(hour_finder(day_schedule))
+if __name__ == "__main__":
+    main()
+    day_schedule = day_setter(schedule("MATH", "241", "1", "2022", "1"))
+    print(hour_finder(day_schedule))
