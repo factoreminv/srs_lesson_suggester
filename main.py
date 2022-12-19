@@ -3,6 +3,7 @@ import html5lib
 import bs4
 import numpy as np
 import os
+from datetime import datetime
 
 
 def schedule(dept, course, sect, year, semester):
@@ -20,13 +21,13 @@ def schedule(dept, course, sect, year, semester):
 
     #print(class_name)
 
-    lesson_plan = open(f"{dept}{course}-{sect}.txt", "w")
+    lesson_plan = open(f"{year}-{semester}_{dept}{course}-{sect}.txt", "w")
     for lesson in soup.find_all("b"):
         lesson_plan.write(str(lesson.parent.parent))
 
     lesson_plan.close()
 
-    file = open(f"{dept}{course}-{sect}.txt", "r")
+    file = open(f"{year}-{semester}_{dept}{course}-{sect}.txt", "r")
 
     line_mat = []
     final_mat = []
@@ -44,7 +45,7 @@ def schedule(dept, course, sect, year, semester):
             line_mat = []
 
     file.close()
-    os.remove(f"{dept}{course}-{sect}.txt")
+    os.remove(f"{year}-{semester}_{dept}{course}-{sect}.txt")
 
     return final_mat
 
