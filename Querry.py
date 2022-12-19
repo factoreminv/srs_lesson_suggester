@@ -5,16 +5,18 @@ from datetime import datetime
 
 def querry(dept):
     class_list =[]
-    for n in range(101, 499):
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    current_day = now.strftime("%A")
+    year = now.year
+    semester = 2 if now.month < 7 else 1
+    for n in range(101, 700):
         for sect in range(1,20):
             try:
-                lis = hour_finder(day_setter(schedule(dept, n, sect, "2022", "1")))
-                now = datetime.now()
-                current_time = now.strftime("%H:%M:%S")
-                current_day = now.strftime("%A")
+                lis = hour_finder(day_setter(schedule(dept, n, sect, year, semester)))
 
                 for element in lis[0::2]:
-                    if element[0] == current_day and element[1] > "13:20":
+                    if element[0] == current_day and element[1] > current_time:
                         class_list.append(tuple([dept]) + tuple([str(n)]) +tuple([sect]) + tuple(lis))
                         print(tuple([dept]) + tuple([str(n)]) +tuple([sect]) + tuple(lis))
             except:
@@ -23,10 +25,13 @@ def querry(dept):
 
 def create_querry_file(dept):
     file = open(dept+".txt","w",encoding="utf-8")
+    now = datetime.now()
+    year = now.year
+    semester = 2 if now.month < 7 else 1
     for n in range(101, 700):
         for sect in range(1,100):
             try:
-                lis = hour_finder(day_setter(schedule(dept, n, sect, "2022", "1")))
+                lis = hour_finder(day_setter(schedule(dept, n, sect, year, semester)))
                 file.write(str(tuple([dept]) + tuple([str(n)]) + tuple([str(sect)]) + tuple(lis))+"\n")
                 print(str(tuple([dept]) + tuple([str(n)]) + tuple([str(sect)]) + tuple(lis)))
             except:
@@ -82,6 +87,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # querry("PHYS")
-    create_querry_file("MATH")
+    # querry("PHYS", "2022", "1")
+    create_querry_file("ECON", "2022", "1")
     # print(T_file_search("PHYS.txt", "13:20", "Tuesday"))
+
